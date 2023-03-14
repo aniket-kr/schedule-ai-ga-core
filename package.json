@@ -1,0 +1,33 @@
+{
+  "name": "timelog-core",
+  "version": "0.0.1",
+  "description": "sample to demostrate the working of the core logic for ai scheduling",
+  "main": "main.ts",
+  "author": "Aniket Kumar",
+  "license": "UNLICENSE",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.ts",
+    "lint:check": "eslint \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "clean": "rm -rf node_modules/ dist/"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "@typescript-eslint/parser": "^5.50.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3"
+  }
+}
