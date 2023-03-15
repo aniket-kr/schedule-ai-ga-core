@@ -1,12 +1,13 @@
+import * as colors from '@colors/colors';
+import chalk from 'chalk';
 import { type Schedule } from '../schedule';
 import { minsToTime, Day } from '../utils';
 import { type TimeSlot } from '../models/models';
 import { type Lecture } from '../lecture';
 import { timeSlots } from '../data';
-import chalk from 'chalk';
-import Table, { VerticalTableRow, type Cell } from 'cli-table3';
+import Table, { type Cell } from 'cli-table3';
+import { type Perspective } from './perspectives';
 import * as data from '../data';
-import { Perspective } from './perspectives';
 
 export type ScheduleBuffer<TKey extends keyof any> = {
     [key in TKey]?: { [key: string]: string };
@@ -22,6 +23,7 @@ export class Printer {
         private readonly printFn: (msg: string) => any = console.log,
         useColorsIfSupported = true,
     ) {
+        useColorsIfSupported ? colors.enable() : colors.disable();
         chalk.level = useColorsIfSupported ? chalk.level : 0;
     }
 

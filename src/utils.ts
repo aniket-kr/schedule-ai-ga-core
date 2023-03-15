@@ -1,3 +1,5 @@
+import { isGeneratorFunction } from 'node:util/types';
+
 export enum Day {
     MONDAY = 'MON',
     TUESDAY = 'TUE',
@@ -56,4 +58,40 @@ export function argsort<T>(arr: T[], compareFn?: (a: T, b: T) => number) {
     const indices = arr.map((_, i) => i);
     indices.sort(compareFn ? (i, j) => compareFn(arr[i], arr[j]) : undefined);
     return indices;
+}
+
+export function linspace(lo: number, hi: number, count: number): number[] {
+    if (count < 2) throw new Error('count must be 2 or more');
+
+    const step = (hi - lo) / (count - 1);
+    const nums = [];
+
+    for (let i = 0; i < count; ++i) {
+        nums.push(lo + i * step);
+    }
+    return nums;
+}
+
+export function genify<TFunc extends (...args: any[]) => any>(
+    fn: TFunc,
+    ...args: Parameters<TFunc>
+) {
+    return (function* () {
+        while (true) {
+            yield fn(...args) as ReturnType<TFunc>;
+        }
+    })();
+}
+
+type Iterableify<T> = { [K in keyof T]: Iterable<T[K]> };
+export function* zip<T extends unknown[]>(...toZip: Iterableify<T>) {
+    const iters = toZip.map((i) => i[Symbol.iterator]());
+
+    while (true) {
+        const results = iters.map((i) => i.next());
+        if (results.some(({ done }) => done ?? false)) {
+            break;
+        }
+        yield results.map(({ value }) => value) as T;
+    }
 }

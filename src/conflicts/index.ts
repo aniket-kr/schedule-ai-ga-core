@@ -9,5 +9,7 @@ export abstract class ScheduleConflict {
 }
 
 export * from './bounded-faculty-time';
+export * from './same-subject-faculty';
 export * from './no-same-faculty';
 export * from './no-same-room';
+export * from './no-same-division';

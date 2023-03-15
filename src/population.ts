@@ -1,6 +1,6 @@
 import { Schedule } from './schedule';
 import { lecturePairs } from './data';
-import { argsort, rnd } from './utils';
+import { argsort, genify, linspace, rnd, zip } from './utils';
 
 export class Population {
     private schedules: Schedule[] = [];
@@ -19,6 +19,10 @@ export class Population {
         }
     }
 
+    get size() {
+        return this.schedules.length;
+    }
+
     fitness() {
         return this.schedules.map((s) => s.fitness());
     }
@@ -33,10 +37,11 @@ export class Population {
             return this;
         }
 
-        const newSchedules = this.schedules
-            .map((sch) => [sch, rnd.uniform()] as [Schedule, number])
-            .map(([sch, u]) => (u < rate ? sch.mutate() : sch));
-
+        const newSchedules: Schedule[] = [];
+        const gen = zip(this, genify(rnd.uniform), linspace(0, 1, this.size));
+        for (const [sch, u, prob] of gen) {
+            newSchedules.push(u * prob > 1 - rate ? sch.mutate() : sch);
+        }
         return new Population(newSchedules);
     }
 

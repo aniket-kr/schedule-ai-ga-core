@@ -1,8 +1,10 @@
 import {
     BoundedFacultyTime,
     LecturePairConflict,
+    NoSameDivision,
     NoSameFaculty,
     NoSameRoom,
+    SameSubjectFaculty,
     ScheduleConflict,
 } from './conflicts';
 import { MutateFaculty, type Mutation } from './mutations';
@@ -22,10 +24,17 @@ export type Conflicts = { hard: ConflictMap; soft: ConflictMap };
 
 export const conflicts: Conflicts = {
     hard: {
-        pairLevel: [new NoSameFaculty(), new NoSameRoom()],
+        pairLevel: [
+            new NoSameFaculty(),
+            new NoSameRoom(),
+            new NoSameDivision(),
+        ],
         scheduleLevel: [],
     },
-    soft: { pairLevel: [], scheduleLevel: [new BoundedFacultyTime(10)] },
+    soft: {
+        pairLevel: [],
+        scheduleLevel: [new BoundedFacultyTime(10), new SameSubjectFaculty()],
+    },
 };
 
 export const reproductions: Reproduction[] = [
