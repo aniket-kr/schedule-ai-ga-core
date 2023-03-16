@@ -1,8 +1,10 @@
 import { lecturePairs } from './data';
 import { Population } from './population';
 import { Schedule } from './schedule';
+import { BestFitSelection, Selection } from './selections';
 
 export type EvolutionConfig = {
+    selectionStrategy: Selection;
     reproductionRate: number;
     mutationRate: number;
     populationSize: number;
@@ -38,6 +40,7 @@ class EvolutionResult {
 
 export class GeneticAlgorithm {
     private static readonly defaultConfig: EvolutionConfig = {
+        selectionStrategy: new BestFitSelection(),
         reproductionRate: 0.2,
         mutationRate: 0.1,
         populationSize: 20,
@@ -55,7 +58,11 @@ export class GeneticAlgorithm {
         config: Partial<EvolutionConfig> = {},
     ) {
         this.config = { ...GeneticAlgorithm.defaultConfig, ...config };
-        this.population = new Population(lecPairs, this.config.populationSize);
+        this.population = new Population(
+            lecPairs,
+            this.config.populationSize,
+            this.config,
+        );
     }
 
     evolved(): boolean {

@@ -1,21 +1,35 @@
 import { Schedule } from './schedule';
 import { lecturePairs } from './data';
 import { argsort, genify, linspace, rnd, zip } from './utils';
+import { EvolutionConfig } from './genetic-algo';
 
 export class Population {
     private schedules: Schedule[] = [];
+    private readonly config: EvolutionConfig;
 
-    constructor(schedules: Schedule[]);
-    constructor(lecPairs: typeof lecturePairs, size: number);
-    constructor(first: typeof lecturePairs | Schedule[], size?: number) {
-        if (size) {
+    constructor(schedules: Schedule[], config: EvolutionConfig);
+    constructor(
+        lecPairs: typeof lecturePairs,
+        size: number,
+        config: EvolutionConfig,
+    );
+    constructor(
+        first: typeof lecturePairs | Schedule[],
+        second: number | EvolutionConfig,
+        config?: EvolutionConfig,
+    ) {
+        if (config) {
             const lecPairs = first as typeof lecturePairs;
+            const size = second as number;
+
             this.schedules.length = size;
             for (let i = 0; i < size; ++i) {
                 this.schedules[i] = new Schedule(lecPairs);
             }
+            this.config = config;
         } else {
             this.schedules = first as Schedule[];
+            this.config = second as EvolutionConfig;
         }
     }
 
@@ -29,7 +43,10 @@ export class Population {
 
     reproduce(rate: number): Population {
         const newSchedules = this.schedules.map((s) => s.reproduce(rate));
-        return new Population([...this.schedules, ...newSchedules]);
+        return new Population(
+            [...this.schedules, ...newSchedules],
+            this.config,
+        );
     }
 
     mutate(rate: number): Population {
@@ -42,19 +59,16 @@ export class Population {
         for (const [sch, u, prob] of gen) {
             newSchedules.push(u * prob > 1 - rate ? sch.mutate() : sch);
         }
-        return new Population(newSchedules);
+        return new Population(newSchedules, this.config);
     }
 
     select(): Population {
-        const indices = argsort(
+        const selected = this.config.selectionStrategy.select(
             this.schedules,
-            (s1, s2) => s2.fitness() - s1.fitness(),
+            this.config,
         );
-        const selected = indices
-            .slice(0, this.schedules.length / 2)
-            .map((i) => this.schedules[i]);
 
-        return new Population(selected);
+        return new Population(selected, this.config);
     }
 
     *[Symbol.iterator]() {
