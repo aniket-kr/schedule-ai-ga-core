@@ -6,7 +6,7 @@ function duration(timeSlot: TimeSlot) {
     return timeSlot.endMins - timeSlot.startMins + 1;
 }
 
-export class BoundedFacultyTime implements ScheduleConflict {
+export class BoundedFacultyTimeConflict implements ScheduleConflict {
     constructor(private readonly upperMins: number) {}
 
     numConflicts(lectures: Lecture[]): number {

@@ -8,8 +8,8 @@ export abstract class ScheduleConflict {
     abstract numConflicts(lectures: Lecture[]): number;
 }
 
-export * from './bounded-faculty-time';
-export * from './same-subject-faculty';
-export * from './no-same-faculty';
-export * from './no-same-room';
-export * from './no-same-division';
+export * from './bounded-faculty-time.conflict';
+export * from './same-subject-faculty.conflict';
+export * from './no-same-faculty.conflict';
+export * from './no-same-room.conflict';
+export * from './no-same-division.conflict';

@@ -2,7 +2,7 @@ import { ScheduleConflict } from '.';
 import { Lecture } from '../lecture';
 import type { Subject, Division, Faculty } from '../models/models';
 
-export class SameSubjectFaculty implements ScheduleConflict {
+export class SameSubjectFacultyConflict implements ScheduleConflict {
     private static makeKey(lec: Lecture) {
         // key: subId-div1Id,div2Id,div3Id
         const divs = lec.divisions.map((div) => `${div.id}`).join(',');
@@ -12,7 +12,7 @@ export class SameSubjectFaculty implements ScheduleConflict {
     numConflicts(lectures: Lecture[]): number {
         const pairs: { [key: string]: Faculty[] } = {};
         for (const lec of lectures) {
-            const key = SameSubjectFaculty.makeKey(lec);
+            const key = SameSubjectFacultyConflict.makeKey(lec);
             pairs[key] = pairs[key] ?? [];
             pairs[key].includes(lec.faculty) || pairs[key].push(lec.faculty);
         }

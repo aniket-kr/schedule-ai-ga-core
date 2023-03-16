@@ -1,7 +1,7 @@
 import { LecturePairConflict } from '.';
 import { Lecture } from '../lecture';
 
-export class NoSameDivision implements LecturePairConflict {
+export class NoSameDivisionConflict implements LecturePairConflict {
     numConflicts(lec1: Lecture, lec2: Lecture): number {
         if (lec1.timeSlot === lec2.timeSlot) {
             const set2 = new Set([...lec2.divisions]);
