@@ -7,6 +7,6 @@ export abstract class Perspective {
     abstract stringify(lec: Lecture, chalk: Chalk): string;
 }
 
-export * from './division-perspective';
-export * from './faculty-perspective';
-export * from './room-perspective';
+export * from './division.perspective';
+export * from './faculty.perspective';
+export * from './room.perspective';

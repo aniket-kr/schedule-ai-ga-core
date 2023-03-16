@@ -7,12 +7,12 @@ import {
     SameSubjectFaculty,
     ScheduleConflict,
 } from './conflicts';
-import { MutateFaculty, type Mutation } from './mutations';
+import { FacultyMutation, type Mutation } from './mutations';
 import {
     type Reproduction,
-    SwapFaculties,
-    SwapRooms,
-    SwapTimeSlots,
+    SwapFacultiesReproduction,
+    SwapRoomsReproduction,
+    SwapTimeSlotsReproduction,
 } from './reproductions';
 
 export type ConflictMap = {
@@ -38,9 +38,9 @@ export const conflicts: Conflicts = {
 };
 
 export const reproductions: Reproduction[] = [
-    new SwapFaculties(),
-    new SwapRooms(),
-    new SwapTimeSlots(),
+    new SwapFacultiesReproduction(),
+    new SwapRoomsReproduction(),
+    new SwapTimeSlotsReproduction(),
 ];
 
-export const mutations: Mutation[] = [new MutateFaculty()];
+export const mutations: Mutation[] = [new FacultyMutation()];

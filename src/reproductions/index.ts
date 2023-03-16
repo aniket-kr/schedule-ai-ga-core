@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { type Lecture } from '../lecture';
 
 export abstract class Reproduction {
@@ -6,6 +5,6 @@ export abstract class Reproduction {
     abstract reproduce(lec1: Lecture, lec2: Lecture): [Lecture, Lecture];
 }
 
-export * from './swap-faculties';
-export * from './swap-rooms';
-export * from './swap-time-slots';
+export * from './swap-faculties.reproduction';
+export * from './swap-rooms.reproduction';
+export * from './swap-time-slots.reproduction';

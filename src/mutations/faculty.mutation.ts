@@ -4,7 +4,7 @@ import { type Faculty } from '../models/models';
 import { rnd } from '../utils';
 import * as data from '../data';
 
-export class MutateFaculty implements Mutation {
+export class FacultyMutation implements Mutation {
     mutate(lec: Lecture): Lecture {
         const possibles = data.subjects[0].faculties();
         let newFac: Faculty;

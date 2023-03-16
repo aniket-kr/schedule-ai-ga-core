@@ -1,7 +1,7 @@
 import { Lecture } from '../lecture';
 import { Reproduction } from './index';
 
-export class SwapFaculties implements Reproduction {
+export class SwapFacultiesReproduction implements Reproduction {
     isValid(lec1: Lecture, lec2: Lecture) {
         const { subject: sub1 } = lec1;
         const { subject: sub2 } = lec2;

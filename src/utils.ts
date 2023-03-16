@@ -1,5 +1,3 @@
-import { isGeneratorFunction } from 'node:util/types';
-
 export enum Day {
     MONDAY = 'MON',
     TUESDAY = 'TUE',

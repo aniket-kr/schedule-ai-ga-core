@@ -1,7 +1,7 @@
 import { Lecture } from '../lecture';
 import { Reproduction } from './index';
 
-export class SwapTimeSlots implements Reproduction {
+export class SwapTimeSlotsReproduction implements Reproduction {
     isValid() {
         return true;
     }

@@ -4,4 +4,4 @@ export abstract class Mutation {
     abstract mutate(lec: Lecture): Lecture;
 }
 
-export * from './mutate-faculty';
+export * from './faculty.mutation';

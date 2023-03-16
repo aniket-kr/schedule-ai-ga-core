@@ -5,4 +5,4 @@ export abstract class Selection {
     abstract select(schedules: Schedule[], config: EvolutionConfig): Schedule[];
 }
 
-export * from './best-fit';
+export * from './best-fit.selection';
