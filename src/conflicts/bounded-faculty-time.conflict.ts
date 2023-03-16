@@ -1,5 +1,5 @@
 import { type Lecture } from '../lecture';
-import { type TimeSlot } from '../models/models';
+import { type TimeSlot } from '../models';
 import { ScheduleConflict } from '.';
 
 function duration(timeSlot: TimeSlot) {

@@ -14,8 +14,8 @@ export class SwapFacultiesReproduction implements Reproduction {
 
     reproduce(lec1: Lecture, lec2: Lecture): [Lecture, Lecture] {
         return [
-            lec1.copyWith({ faculty: lec2.faculty }),
-            lec2.copyWith({ faculty: lec1.faculty }),
+            lec1.with({ faculty: lec2.faculty }),
+            lec2.with({ faculty: lec1.faculty }),
         ];
     }
 }

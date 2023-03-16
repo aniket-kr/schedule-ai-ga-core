@@ -1,7 +1,7 @@
-import { lecturePairs } from './data';
+import { type InputModelData } from './models';
 import { Population } from './population';
-import { Schedule } from './schedule';
-import { BestFitSelection, Selection } from './selections';
+import { type Schedule } from './schedule';
+import { BestFitSelection, type Selection } from './selections';
 
 export type EvolutionConfig = {
     selectionStrategy: Selection;
@@ -22,7 +22,7 @@ class EvolutionResult {
     }
 
     worst(): Schedule {
-        return this.schedules[0];
+        return this.schedules[this.schedules.length - 1];
     }
 
     firstN(n: number): Schedule[] {
@@ -53,16 +53,9 @@ export class GeneticAlgorithm {
     private population: Population;
     private result?: EvolutionResult;
 
-    constructor(
-        lecPairs: typeof lecturePairs,
-        config: Partial<EvolutionConfig> = {},
-    ) {
+    constructor(inputs: InputModelData, config: Partial<EvolutionConfig> = {}) {
         this.config = { ...GeneticAlgorithm.defaultConfig, ...config };
-        this.population = new Population(
-            lecPairs,
-            this.config.populationSize,
-            this.config,
-        );
+        this.population = new Population(inputs, this.config);
     }
 
     evolved(): boolean {

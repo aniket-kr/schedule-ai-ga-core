@@ -42,3 +42,14 @@ export interface Division extends Model {
     name: string;
     strength: number;
 }
+
+export type InputModelData = {
+    roomTypes: RoomType[];
+    departments: Department[];
+    rooms: Room[];
+    divisions: Division[];
+    timeSlots: TimeSlot[];
+    subjects: Subject[];
+    faculties: Faculty[];
+    lecturePairs: [Subject, Division[]][];
+};

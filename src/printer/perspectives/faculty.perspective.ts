@@ -1,7 +1,7 @@
 import { type Chalk } from 'chalk';
 import { Perspective } from '.';
 import { type Lecture } from '../../lecture';
-import { type Faculty } from '../../models/models';
+import { type Faculty } from '../../models';
 
 export class FacultyPerspective implements Perspective {
     constructor(private readonly faculty: Faculty) {}

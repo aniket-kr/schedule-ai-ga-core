@@ -1,7 +1,7 @@
 import { type Chalk } from 'chalk';
 import { Perspective } from '.';
 import { type Lecture } from '../../lecture';
-import { type Room } from '../../models/models';
+import { type Room } from '../../models';
 
 export class RoomPerspective implements Perspective {
     constructor(private readonly room: Room) {}

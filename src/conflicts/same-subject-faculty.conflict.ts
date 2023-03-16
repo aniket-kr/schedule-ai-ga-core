@@ -1,6 +1,6 @@
 import { ScheduleConflict } from '.';
 import { Lecture } from '../lecture';
-import type { Subject, Division, Faculty } from '../models/models';
+import type { Subject, Division, Faculty } from '../models';
 
 export class SameSubjectFacultyConflict implements ScheduleConflict {
     private static makeKey(lec: Lecture) {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
     Department,
     Division,
@@ -7,7 +6,7 @@ import {
     RoomType,
     Subject,
     TimeSlot,
-} from './models/models';
+} from './models';
 import { Day, timeToMins } from './utils';
 
 export const roomTypes: RoomType[] = [

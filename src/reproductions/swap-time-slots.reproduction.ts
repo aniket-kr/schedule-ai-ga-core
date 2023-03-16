@@ -8,8 +8,8 @@ export class SwapTimeSlotsReproduction implements Reproduction {
 
     reproduce(lec1: Lecture, lec2: Lecture): [Lecture, Lecture] {
         return [
-            lec1.copyWith({ timeSlot: lec2.timeSlot }),
-            lec2.copyWith({ timeSlot: lec1.timeSlot }),
+            lec1.with({ timeSlot: lec2.timeSlot }),
+            lec2.with({ timeSlot: lec1.timeSlot }),
         ];
     }
 }

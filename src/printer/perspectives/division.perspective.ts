@@ -1,7 +1,7 @@
 import { type Chalk } from 'chalk';
 import { Perspective } from '.';
 import { type Lecture } from '../../lecture';
-import { type Division } from '../../models/models';
+import { type Division } from '../../models';
 
 export class DivisionPerspective implements Perspective {
     public readonly divisions: Division[];

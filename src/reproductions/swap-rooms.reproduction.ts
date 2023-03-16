@@ -7,9 +7,6 @@ export class SwapRoomsReproduction implements Reproduction {
     }
 
     reproduce(lec1: Lecture, lec2: Lecture): [Lecture, Lecture] {
-        return [
-            lec1.copyWith({ room: lec2.room }),
-            lec2.copyWith({ room: lec1.room }),
-        ];
+        return [lec1.with({ room: lec2.room }), lec2.with({ room: lec1.room })];
     }
 }

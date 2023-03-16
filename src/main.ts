@@ -8,7 +8,7 @@ import {
     RoomPerspective,
 } from './printer/perspectives';
 
-const ga = new GeneticAlgorithm(data.lecturePairs, {
+const ga = new GeneticAlgorithm(data, {
     populationSize: 25,
     maxGenerations: 30000,
     mutationRate: 0.4,
@@ -17,16 +17,18 @@ const ga = new GeneticAlgorithm(data.lecturePairs, {
 
 const result = ga.evolve();
 
-const file = fs.openSync('timetables.txt', 'w');
-const printer = new Printer(
-    result.best(),
-    (msg) => {
-        fs.writeSync(file, msg);
-        fs.writeSync(file, '\n\n');
-        console.log(msg);
-    },
-    false,
-);
+// const file = fs.openSync('timetables.txt', 'w');
+// const printer = new Printer(
+//     data,
+//     result.best(),
+//     (msg) => {
+//         fs.writeSync(file, msg);
+//         fs.writeSync(file, '\n\n');
+//         console.log(msg);
+//     },
+//     false,
+// );
+const printer = new Printer(data, result.best());
 
 console.log({
     hard: result.best().conflicts('hard'),
@@ -36,4 +38,4 @@ console.log({
 data.divisions.forEach((div) => printer.print(new DivisionPerspective(div)));
 data.faculties.forEach((fac) => printer.print(new FacultyPerspective(fac)));
 data.rooms.forEach((room) => printer.print(new RoomPerspective(room)));
-fs.closeSync(file);
+// fs.closeSync(file);

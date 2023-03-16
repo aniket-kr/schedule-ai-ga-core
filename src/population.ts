@@ -1,36 +1,41 @@
 import { Schedule } from './schedule';
-import { lecturePairs } from './data';
 import { genify, linspace, rnd, zip } from './utils';
 import { EvolutionConfig } from './genetic-algo';
+import { InputModelData } from './models';
 
 export class Population {
     private schedules: Schedule[] = [];
     private readonly config: EvolutionConfig;
+    private readonly inputs: InputModelData;
 
-    constructor(schedules: Schedule[], config: EvolutionConfig);
+    constructor(inputs: InputModelData, config: EvolutionConfig);
     constructor(
-        lecPairs: typeof lecturePairs,
-        size: number,
+        schedules: Schedule[],
+        inputs: InputModelData,
         config: EvolutionConfig,
     );
     constructor(
-        first: typeof lecturePairs | Schedule[],
-        second: number | EvolutionConfig,
+        first: Schedule[] | InputModelData,
+        second: InputModelData | EvolutionConfig,
         config?: EvolutionConfig,
     ) {
         if (config) {
-            const lecPairs = first as typeof lecturePairs;
-            const size = second as number;
-
-            this.schedules.length = size;
-            for (let i = 0; i < size; ++i) {
-                this.schedules[i] = new Schedule(lecPairs);
-            }
+            this.schedules = first as Schedule[];
+            this.inputs = second as InputModelData;
             this.config = config;
         } else {
-            this.schedules = first as Schedule[];
+            this.inputs = first as InputModelData;
             this.config = second as EvolutionConfig;
+
+            const size = this.config.populationSize;
+            for (let i = 0; i < size; ++i) {
+                this.schedules[i] = new Schedule(this.inputs);
+            }
         }
+    }
+
+    makePopulation(schedules: Schedule[]): Population {
+        return new Population(schedules, this.inputs, this.config);
     }
 
     get size() {
@@ -43,10 +48,7 @@ export class Population {
 
     reproduce(rate: number): Population {
         const newSchedules = this.schedules.map((s) => s.reproduce(rate));
-        return new Population(
-            [...this.schedules, ...newSchedules],
-            this.config,
-        );
+        return this.makePopulation([...this.schedules, ...newSchedules]);
     }
 
     mutate(rate: number): Population {
@@ -59,7 +61,7 @@ export class Population {
         for (const [sch, u, prob] of gen) {
             newSchedules.push(u * prob > 1 - rate ? sch.mutate() : sch);
         }
-        return new Population(newSchedules, this.config);
+        return this.makePopulation(newSchedules);
     }
 
     select(): Population {
@@ -68,7 +70,7 @@ export class Population {
             this.config,
         );
 
-        return new Population(selected, this.config);
+        return this.makePopulation(selected);
     }
 
     *[Symbol.iterator]() {

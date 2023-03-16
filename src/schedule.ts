@@ -4,50 +4,60 @@ import {
     reproductions,
     mutations,
 } from './config';
-import { Reproduction } from './reproductions';
-import { rooms, timeSlots } from './data';
+import { type Reproduction } from './reproductions';
 import { Lecture } from './lecture';
-import { Division, Subject } from './models/models';
+import { type InputModelData } from './models';
 import { pairwise, rnd } from './utils';
 
 export class Schedule {
+    private readonly inputs: InputModelData;
     private readonly lectures: Lecture[];
     private hardConflicts = 0;
     private softConflicts = 0;
     private isStale = true;
 
-    constructor(lecturePairs: [Subject, Division[]][]);
-    constructor(original: Lecture[], replaceWith: { [key: number]: Lecture });
+    constructor(inputs: InputModelData);
     constructor(
-        first: (Lecture | [Subject, Division[]])[],
-        replaceWith?: { [key: number]: Lecture },
+        origLectures: Lecture[],
+        replacements: { [key: number]: Lecture },
+        inputs: InputModelData,
+    );
+    constructor(
+        first: InputModelData | Lecture[],
+        replacements?: { [key: number]: Lecture },
+        inputs?: InputModelData,
     ) {
-        if (!replaceWith) {
-            const lecturePairs = first as [Subject, Division[]][];
+        if (inputs && replacements) {
+            const origLectures = first as Lecture[];
+            this.inputs = inputs;
 
-            this.lectures = lecturePairs.map((pair) => new Lecture(...pair));
-            this.lectures.forEach((lecture) => {
-                const { type: roomType } = lecture.subject;
-                const validRooms = rooms.filter(
-                    ({ type }) => type === roomType,
-                );
-                lecture.set({
-                    room: rnd.choice(validRooms),
-                    faculty: rnd.choice(lecture.subject.faculties()),
-                    timeSlot: rnd.choice(timeSlots),
-                });
-            });
+            for (const key in replacements) {
+                if (!replacements.hasOwnProperty(key)) continue;
+                origLectures[key] = replacements[key];
+            }
+            this.lectures = origLectures;
         } else {
-            // new Schedule(this.lectures, { 0: lec2, 1: lec5 });
-            const original = [...(first as Lecture[])];
-            Object.keys(replaceWith).forEach(
-                (idx) => (original[Number(idx)] = replaceWith[Number(idx)]),
+            this.inputs = first as InputModelData;
+
+            this.lectures = this.inputs.lecturePairs.map(
+                ([sub, divs]) =>
+                    new Lecture({
+                        subject: sub,
+                        divisions: divs,
+                        room: rnd.choice(this.inputs.rooms),
+                        faculty: rnd.choice(sub.faculties()),
+                        timeSlot: rnd.choice(this.inputs.timeSlots),
+                    }),
             );
-            this.lectures = original;
         }
     }
 
-    fitness() {
+    with(replacements: { [key: number]: Lecture }): Schedule {
+        // constructor expects a copy of lectures
+        return new Schedule([...this.lectures], replacements, this.inputs);
+    }
+
+    fitness(): number {
         if (this.isStale) {
             this.hardConflicts = this.findScore(conflicts.hard);
             this.softConflicts = this.findScore(conflicts.soft);
@@ -67,7 +77,7 @@ export class Schedule {
         }[type];
     }
 
-    private findScore(conflictMap: ConflictMap) {
+    private findScore(conflictMap: ConflictMap): number {
         let count = 0;
         for (const strategy of conflictMap.scheduleLevel) {
             count += strategy.numConflicts(this.lectures);
@@ -81,7 +91,7 @@ export class Schedule {
         return count;
     }
 
-    private getReproductionSize(rate: number) {
+    private getReproductionSize(rate: number): number {
         if (rate < 0 || rate > 1) {
             throw new Error(`invalid reproduction rate: ${rate} not in [0, 1]`);
         }
@@ -106,13 +116,13 @@ export class Schedule {
             replacements[indices[i]] = newLec2;
         }
 
-        return new Schedule(this.lectures, replacements);
+        return this.with(replacements);
     }
 
     mutate(): Schedule {
         const iLec = rnd.int(0, this.lectures.length);
         const mutatedLec = rnd.choice(mutations).mutate(this.lectures[iLec]);
-        return new Schedule(this.lectures, { [iLec]: mutatedLec });
+        return this.with({ [iLec]: mutatedLec });
     }
 
     *[Symbol.iterator]() {

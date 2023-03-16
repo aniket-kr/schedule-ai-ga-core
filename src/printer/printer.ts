@@ -2,12 +2,10 @@ import * as colors from '@colors/colors';
 import chalk from 'chalk';
 import { type Schedule } from '../schedule';
 import { minsToTime, Day } from '../utils';
-import { type TimeSlot } from '../models/models';
+import { InputModelData, type TimeSlot } from '../models';
 import { type Lecture } from '../lecture';
-import { timeSlots } from '../data';
 import Table, { type Cell } from 'cli-table3';
 import { type Perspective } from './perspectives';
-import * as data from '../data';
 
 export type ScheduleBuffer<TKey extends keyof any> = {
     [key in TKey]?: { [key: string]: string };
@@ -19,6 +17,7 @@ function timeSlotStringify(slot: TimeSlot) {
 
 export class Printer {
     constructor(
+        public readonly inputs: InputModelData,
         public readonly schedule: Schedule,
         private readonly printFn: (msg: string) => any = console.log,
         useColorsIfSupported = true,
@@ -43,9 +42,11 @@ export class Printer {
 
         const usedTimeSlots = shrink
             ? new Set(Object.values(buffer).flatMap((obj) => Object.keys(obj)))
-            : new Set(data.timeSlots.map((slot) => timeSlotStringify(slot)));
+            : new Set(
+                  this.inputs.timeSlots.map((slot) => timeSlotStringify(slot)),
+              );
 
-        const sortedSlots = timeSlots
+        const sortedSlots = this.inputs.timeSlots
             .slice()
             .sort((slot1, slot2) => slot1.startMins - slot2.startMins)
             .map((slot) => timeSlotStringify(slot))

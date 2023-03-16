@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "ts-node src/main.ts",
     "build": "tsc",
-    "start": "node dist/main.ts",
+    "start": "node dist/main.js",
     "lint:check": "eslint \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "format:check": "prettier --check \"src/**/*.ts\"",
