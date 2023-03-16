@@ -1,6 +1,6 @@
 import { Schedule } from './schedule';
 import { lecturePairs } from './data';
-import { argsort, genify, linspace, rnd, zip } from './utils';
+import { genify, linspace, rnd, zip } from './utils';
 import { EvolutionConfig } from './genetic-algo';
 
 export class Population {

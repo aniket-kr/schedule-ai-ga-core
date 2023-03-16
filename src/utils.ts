@@ -52,12 +52,6 @@ export function* pairwise<T>(items: T[]): Generator<[T, T], void> {
     }
 }
 
-export function argsort<T>(arr: T[], compareFn?: (a: T, b: T) => number) {
-    const indices = arr.map((_, i) => i);
-    indices.sort(compareFn ? (i, j) => compareFn(arr[i], arr[j]) : undefined);
-    return indices;
-}
-
 export function linspace(lo: number, hi: number, count: number): number[] {
     if (count < 2) throw new Error('count must be 2 or more');
 
