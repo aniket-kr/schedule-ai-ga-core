@@ -72,6 +72,13 @@ export class GeneticAlgorithm {
                 .reproduce(this.config.reproductionRate)
                 .mutate(this.config.mutationRate)
                 .select();
+
+            if (gen % 1000 === 0) {
+                console.log({
+                    generations: gen,
+                    fitness: this.population.fitness(),
+                });
+            }
         }
         this.result = new EvolutionResult([...this.population]);
         return this.result;
