@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { conflicts } from './config';
 import * as data from './data';
 import { GeneticAlgorithm } from './genetic-algo';
 import { Printer } from './printer';
@@ -7,15 +8,18 @@ import {
     FacultyPerspective,
     RoomPerspective,
 } from './printer/perspectives';
+import { ViolationReporter } from './reporter';
 
 const ga = new GeneticAlgorithm(data, {
     populationSize: 25,
-    maxGenerations: 30000,
+    maxGenerations: 25000,
     mutationRate: 0.4,
     reproductionRate: 0.2,
 });
 
 const result = ga.evolve();
+const reporter = new ViolationReporter(result.best(), conflicts);
+console.log(reporter.violations());
 
 // const file = fs.openSync('timetables.txt', 'w');
 // const printer = new Printer(

@@ -1,11 +1,21 @@
 import { type Lecture } from '../lecture';
 
 export abstract class LecturePairConflict {
+    label() {
+        return this.constructor.name;
+    }
+
     abstract numConflicts(lec1: Lecture, lec2: Lecture): number;
+    abstract report(lec1: Lecture, lec2: Lecture): [string, number][];
 }
 
 export abstract class ScheduleConflict {
+    label() {
+        return this.constructor.name;
+    }
+
     abstract numConflicts(lectures: Lecture[]): number;
+    abstract report(lectures: Lecture[]): [string, number][];
 }
 
 export * from './bounded-faculty-time.conflict';
