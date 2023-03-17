@@ -1,3 +1,5 @@
+import { type TimeSlot } from './models';
+
 export enum Day {
     MONDAY = 'MON',
     TUESDAY = 'TUE',
@@ -8,15 +10,22 @@ export enum Day {
     SUNDAY = 'SUN',
 }
 
-export function timeToMins(time: string) {
+export function timeToMins(time: string): number {
     const [hours, mins] = time.split(':', 2);
     return parseInt(hours) * 60 + parseInt(mins);
 }
 
-export function minsToTime(minutes: number) {
+export function minsToTime(minutes: number): string {
     const hoursStr = String(Math.floor(minutes / 60)).padStart(2, '0');
     const minsStr = String(minutes % 60).padStart(2, '0');
     return `${hoursStr}:${minsStr}`;
+}
+
+export function stringifySlot(timeSlot: TimeSlot): string {
+    const day = timeSlot.day.toString();
+    const start = minsToTime(timeSlot.startMins);
+    const end = minsToTime(timeSlot.endMins);
+    return `${day}, ${start} - ${end}`;
 }
 
 const BIG_PRIME_NUM = Math.pow(2, 31) - 1;
