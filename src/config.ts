@@ -34,7 +34,7 @@ export const conflicts: Conflicts = {
     soft: {
         pairLevel: [],
         scheduleLevel: [
-            new BoundedFacultyTimeConflict(10),
+            new BoundedFacultyTimeConflict(10 * 60),
             new SameSubjectFacultyConflict(),
         ],
     },
