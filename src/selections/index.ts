@@ -6,3 +6,4 @@ export abstract class Selection {
 }
 
 export * from './best-fit.selection';
+export * from './roulette.selection';

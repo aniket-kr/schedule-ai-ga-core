@@ -44,7 +44,11 @@ export class Schedule {
                     new Lecture({
                         subject: sub,
                         divisions: divs,
-                        room: rnd.choice(this.inputs.rooms),
+                        room: rnd.choice(
+                            this.inputs.rooms.filter(
+                                (room) => room.type === sub.type,
+                            ),
+                        ),
                         faculty: rnd.choice(sub.faculties()),
                         timeSlot: rnd.choice(this.inputs.timeSlots),
                     }),
@@ -121,7 +125,10 @@ export class Schedule {
 
     mutate(): Schedule {
         const iLec = rnd.int(0, this.lectures.length);
-        const mutatedLec = rnd.choice(mutations).mutate(this.lectures[iLec]);
+        const mutatedLec = rnd
+            .choice(mutations)
+            .mutate(this.lectures[iLec], this.inputs);
+
         return this.with({ [iLec]: mutatedLec });
     }
 

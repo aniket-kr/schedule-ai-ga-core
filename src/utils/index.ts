@@ -1,4 +1,4 @@
-import { type TimeSlot } from './models';
+import { type TimeSlot } from '.././models';
 
 export enum Day {
     MONDAY = 'MON',
@@ -27,31 +27,6 @@ export function stringifySlot(timeSlot: TimeSlot): string {
     const end = minsToTime(timeSlot.endMins);
     return `${day}, ${start} - ${end}`;
 }
-
-const BIG_PRIME_NUM = Math.pow(2, 31) - 1;
-export const rnd = {
-    uniform: () => Math.random(),
-    int: (lo: number, hi: number) => {
-        const rand = Math.round(Math.random() * BIG_PRIME_NUM);
-        return lo + (rand % (hi - lo));
-    },
-    uniqueInts: (lo: number, hi: number, size: number) => {
-        const set = new Set<number>();
-        while (set.size < size) {
-            const num = rnd.int(lo, hi);
-            set.add(num);
-        }
-        return [...set];
-    },
-    choice: <T>(arr: T[]) => arr[rnd.int(0, arr.length)],
-    shuffle: <T>(arr: T[]) => {
-        for (let i = 0; i < arr.length; ++i) {
-            const j = rnd.int(i + 1, arr.length);
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    },
-};
 
 export function* pairwise<T>(items: T[]): Generator<[T, T], void> {
     for (let i = 0; i < items.length; ++i) {
@@ -96,3 +71,15 @@ export function* zip<T extends unknown[]>(...toZip: Iterableify<T>) {
         yield results.map(({ value }) => value) as T;
     }
 }
+
+export function argsort<T>(
+    arr: T[],
+    compareFn?: (a: T, b: T) => number,
+): number[] {
+    const comparator = compareFn
+        ? (i: number, j: number) => compareFn(arr[i], arr[j])
+        : undefined;
+    return arr.map((_, i) => i).sort(comparator);
+}
+
+export * as rnd from './random';

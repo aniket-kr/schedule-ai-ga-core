@@ -23,3 +23,5 @@ export * from './same-subject-faculty.conflict';
 export * from './no-same-faculty.conflict';
 export * from './no-same-room.conflict';
 export * from './no-same-division.conflict';
+export * from './no-room-overflow.conflict';
+export * from './room-type.conflict';

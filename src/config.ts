@@ -1,13 +1,15 @@
 import {
     BoundedFacultyTimeConflict,
     LecturePairConflict,
+    NoRoomOverflowConflict,
     NoSameDivisionConflict,
     NoSameFacultyConflict,
     NoSameRoomConflict,
+    RoomTypeConflict,
     SameSubjectFacultyConflict,
     ScheduleConflict,
 } from './conflicts';
-import { FacultyMutation, type Mutation } from './mutations';
+import { FacultyMutation, RoomMutation, type Mutation } from './mutations';
 import {
     type Reproduction,
     SwapFacultiesReproduction,
@@ -29,7 +31,7 @@ export const conflicts: Conflicts = {
             new NoSameRoomConflict(),
             new NoSameDivisionConflict(),
         ],
-        scheduleLevel: [],
+        scheduleLevel: [new NoRoomOverflowConflict(), new RoomTypeConflict()],
     },
     soft: {
         pairLevel: [],
@@ -46,4 +48,7 @@ export const reproductions: Reproduction[] = [
     new SwapTimeSlotsReproduction(),
 ];
 
-export const mutations: Mutation[] = [new FacultyMutation()];
+export const mutations: Mutation[] = [
+    new FacultyMutation(),
+    new RoomMutation(),
+];
