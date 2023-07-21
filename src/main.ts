@@ -12,7 +12,7 @@ import { ViolationReporter } from './reporter';
 
 const ga = new GeneticAlgorithm(data, {
     populationSize: 50,
-    maxGenerations: 16000,
+    maxGenerations: 25,
     mutationRate: 0.4,
     reproductionRate: 0.2,
 });
@@ -21,16 +21,16 @@ const result = ga.evolve();
 const reporter = new ViolationReporter(result.best(), conflicts);
 console.log(reporter.violations());
 
-const file = fs.openSync('timetables.txt', 'w');
+// const file = fs.openSync('timetable.txt', 'w');
 const printer = new Printer(
     data,
     result.best(),
     (msg) => {
-        fs.writeSync(file, msg);
-        fs.writeSync(file, '\n\n');
+        // fs.writeSync(file, msg);
+        // fs.writeSync(file, '\n\n');
         console.log(msg);
     },
-    false,
+    true,
 );
 // const printer = new Printer(data, result.best());
 
@@ -42,4 +42,4 @@ console.log({
 data.divisions.forEach((div) => printer.print(new DivisionPerspective(div)));
 data.faculties.forEach((fac) => printer.print(new FacultyPerspective(fac)));
 data.rooms.forEach((room) => printer.print(new RoomPerspective(room)));
-fs.closeSync(file);
+// fs.closeSync(file);
